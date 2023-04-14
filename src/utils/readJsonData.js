@@ -1,5 +1,4 @@
 const fs = require('fs').promises;
-// 
 
 const readJsonData = async (path) => {
     try {
@@ -10,9 +9,5 @@ const readJsonData = async (path) => {
         console.error('O arquivo não pode ser lido!');
     }   
 };
-
-// 
-
-// readJsonData(moviesPath);
 
 module.exports = readJsonData;

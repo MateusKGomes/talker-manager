@@ -3,6 +3,8 @@ const fs = require('fs').promises;
 const { join } = require('path');
 const readJsonData = require('./utils/readJsonData');
 const randonToken = require('./utils/randonToken');
+const emailValidation = require('./Middlewares/emailValidation');
+const passwordValidation = require('./Middlewares/passwordValidation');
 
 console.log(randonToken(16));
 
@@ -53,7 +55,7 @@ app.get('/talker/:id', async (req, res) => {
   return res.status(200).json(getTalkerId);
 })
 
-app.post('/login', async(req, res) => {
+app.post('/login', emailValidation, passwordValidation, async(req, res) => {
   const token = randonToken(16);
-  return res.status(200).json({ token, });
+  return res.status(200).json({ token });
 })
