@@ -1,9 +1,15 @@
 const express = require('express');
 const { join } = require('path');
+const fs = require('fs').promises;
+
 const readJsonData = require('./utils/readJsonData');
 const randonToken = require('./utils/randonToken');
 const emailValidation = require('./Middlewares/emailValidation');
 const passwordValidation = require('./Middlewares/passwordValidation');
+const nameValidation = require('./Middlewares/nameValidation');
+const ageValidation = require('./Middlewares/ageValidation');
+const talkValidation = require('./Middlewares/talkValidation');
+const tokenValidation = require('./Middlewares/tokenValidation');
 
 console.log(randonToken(16));
 
@@ -45,7 +51,30 @@ app.get('/talker/:id', async (req, res) => {
   return res.status(200).json(getTalkerId);
 });
 
-app.post('/login', emailValidation, passwordValidation, async (req, res) => {
+app.post('/login', emailValidation, passwordValidation, async (__req, res) => {
   const token = randonToken(16);
   return res.status(200).json({ token });
+});
+
+app.post('/talker',
+tokenValidation,
+nameValidation,
+ageValidation,
+talkValidation.talkValidation,
+talkValidation.rateValidation,
+ async (req, res) => {
+  const talkers = await readJsonData(joinPath);
+  const { name, age, talk: { watchedAt, rate } } = req.body;
+  const newTalker = {
+    name,
+    age,
+    id: Number(talkers[talkers.length - 1].id) + 1,
+    talk: {
+      watchedAt,
+      rate,
+    },
+  };
+  talkers.push(newTalker);
+  await fs.writeFile(joinPath, JSON.stringify(talkers));
+  return res.status(201).json(newTalker);
 });
