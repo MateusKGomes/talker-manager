@@ -7,9 +7,8 @@ const ageValidation = (req, res, next) => {
         return res.status(400).json({
             message: 'O campo "age" deve ser um número inteiro igual ou maior que 18',
          });
-    };
+    }
     return next();
-
 };
 
 module.exports = ageValidation;

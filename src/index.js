@@ -11,8 +11,6 @@ const ageValidation = require('./Middlewares/ageValidation');
 const talkValidation = require('./Middlewares/talkValidation');
 const tokenValidation = require('./Middlewares/tokenValidation');
 
-console.log(randonToken(16));
-
 const app = express();
 app.use(express.json());
 
@@ -77,4 +75,25 @@ talkValidation.rateValidation,
   talkers.push(newTalker);
   await fs.writeFile(joinPath, JSON.stringify(talkers));
   return res.status(201).json(newTalker);
+});
+
+app.put('/talker/:id',
+tokenValidation,
+nameValidation,
+ageValidation,
+talkValidation.talkValidation,
+talkValidation.rateValidation,
+async (req, res) => {
+  const { name, age, talk } = req.body;
+  const { id } = req.params;
+  const talkers = await readJsonData(joinPath);
+  const findTalker = talkers.findIndex((talker) => talker.id === +id);
+  const talkerId = talkers.some((talker) => talker.id === +id);
+  if (!talkerId) {
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  } 
+  const updateTalker = { id: Number(id), name, age, talk };
+  talkers[findTalker] = updateTalker;
+  await fs.writeFile(joinPath, JSON.stringify(talkers));
+  return res.status(200).json(updateTalker);
 });
