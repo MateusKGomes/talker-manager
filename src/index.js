@@ -97,3 +97,11 @@ async (req, res) => {
   await fs.writeFile(joinPath, JSON.stringify(talkers));
   return res.status(200).json(updateTalker);
 });
+
+app.delete('/talker/:id', tokenValidation, async (req, res) => {
+  const talkers = await readJsonData(joinPath);
+  const { id } = req.params;
+  const deleteTalker = talkers.filter((talker) => talker.id !== +id);
+  await fs.writeFile(joinPath, JSON.stringify(deleteTalker));
+  return res.status(204).end(); 
+});
