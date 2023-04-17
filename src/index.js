@@ -38,6 +38,22 @@ app.get('/talker', async (__req, res) => {
   return res.status(200).json(talkers);
 });
 
+app.get('/talker/search', tokenValidation, async (req, res) => {
+  const { q } = req.query;
+  const talkers = await readJsonData(joinPath);
+  
+  if (q === undefined || q === '') {
+    return res.status(200).json(talkers);
+  }
+  const filterByName = talkers
+  .filter((talker) => talker.name.toLowerCase().includes(q.toLocaleLowerCase()));
+
+  if (filterByName.length === 0) {
+    return res.status(200).json([]);
+  }
+  return res.status(200).json(filterByName);
+});
+
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
   const talkers = await readJsonData(joinPath);
