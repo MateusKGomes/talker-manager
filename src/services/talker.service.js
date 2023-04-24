@@ -10,9 +10,9 @@ const findAll = async () => {
     return talkers;
 };
 
-const findById = async (id) => {
+const findById = async (param) => {
     const talkers = await readJsonData(joinPath);
-    const talkerById = talkers.find((talker) => talker.id === id);
+    const talkerById = talkers.find((talker) => talker.id === +param);
     return talkerById;
 };
 
@@ -44,9 +44,25 @@ const editTalker = async (param, body) => {
     return [updateTalker, talkers];
 };
 
+const searchByName = async (param) => {
+    const talkers = await readJsonData(joinPath);
+    const filterByName = talkers
+    .filter((talker) => talker.name.toLowerCase().includes(param.toLocaleLowerCase()));
+    return filterByName;
+};
+
+const deleteTalkerById = async (param) => {
+    const talkers = await readJsonData(joinPath);
+    const deleteTalker = talkers.filter((talker) => talker.id !== +param);
+    await writeJson(joinPath, deleteTalker);
+    return deleteTalker;
+};
+
 module.exports = { 
     findAll,
     findById,
     createNewTalker,
     editTalker,
+    searchByName,
+    deleteTalkerById,
 };
