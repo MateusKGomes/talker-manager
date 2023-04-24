@@ -10,4 +10,10 @@ const readJsonData = async (path) => {
     }   
 };
 
-module.exports = readJsonData;
+const writeJson = async (path, data) => {
+    const updateData = JSON.stringify(data);
+    const result = await fs.writeFile(path, updateData);
+    return result;
+};
+
+module.exports = { readJsonData, writeJson };
