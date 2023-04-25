@@ -7,7 +7,7 @@ const readJsonData = async (path) => {
         return response;
     } catch (error) {
         console.error('O arquivo não pode ser lido!');
-    }   
+    }
 };
 
 const writeJson = async (path, data) => {
@@ -16,4 +16,7 @@ const writeJson = async (path, data) => {
     return result;
 };
 
-module.exports = { readJsonData, writeJson };
+module.exports = {
+    readJsonData,
+    writeJson,
+};

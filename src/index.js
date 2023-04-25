@@ -9,6 +9,7 @@ app.use(express.json());
 
 app.use('/login', login);
 app.use('/talker', talker);
+app.get('/status', (req, res) => res.status(200).json({ message: 'funcionando!' }));
 
 const HTTP_OK_STATUS = 200;
 const PORT = process.env.PORT || '3001';
