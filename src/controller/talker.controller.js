@@ -1,9 +1,3 @@
-const {
-  createNewTalker,
-  searchByName,
-  deleteTalkerById,
-  editTalker,
-} = require('../services/talker.service');
 const talkerService = require('../services/talker.service');
 
 const getAll = async (req, res) => {
@@ -24,12 +18,12 @@ const findById = async (req, res) => {
 };
 
 const postNewTalker = async (req, res) => {
-  const talkers = await createNewTalker(req.body);
+  const talkers = await talkerService.postNewTalker(req.body);
   return res.status(201).json(talkers);
 };
 
 const putTalker = async (req, res) => {
-  const talkers = await editTalker(req.params, req.body);
+  const talkers = await talkerService.putTalker(req.params, req.body);
   if (talkers.type) {
     return res.status(talkers.type).json(talkers.message);
   }
@@ -38,17 +32,16 @@ const putTalker = async (req, res) => {
 
 const getByName = async (req, res) => {
   const { q } = req.query;
-  const talkers = await searchByName(q);
+  const talkers = await talkerService.getByName(q);
   if (talkers.type) {
     return res.status(200).json(talkers.message);
   }
-  console.log('query', q);
   return res.status(200).json(talkers.message);
 };
 
 const deleteTalker = async (req, res) => {
   const { id } = req.params;
-  await deleteTalkerById(id);
+  await talkerService.deleteTalker(id);
   return res.status(204).end();
 };
 

@@ -7,7 +7,6 @@ const login = express.Router();
 
 login.post('/', emailValidation, passwordValidation, async (__req, res) => {
     const token = randonToken(16);
-    console.log('token', token);
     return res.status(200).json({ token });
   });
 
